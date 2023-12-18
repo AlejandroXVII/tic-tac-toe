@@ -1,0 +1,72 @@
+:root{
+    --principal-color: #F3B562;
+    --background-color: #F2EBBF;
+    --header-footer-color: #F2EBBF  ;
+    --profile-background-color: #c4b5fd;
+    --icon-size: 25px;
+    --shadow: 0px 15px 30px -35px black;
+    --radius: 15px;
+    --box-size-width: 240px;
+    --tex-description-color: rgb(87, 87, 87);
+    --tex-icon-color: #5C4B51;
+    --text-description-size: 14px;
+    --cell-size: 150px;
+}
+
+body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 10fr auto;
+    background-color: var(--background-color);
+    color: var(--tex-icon-color);
+    svg{
+        fill: var(--tex-icon-color);
+        height: 45px;
+    }
+    main{
+        display: grid;
+        align-items: center;
+        justify-items: center;
+    }
+}
+
+header, footer{
+    background-color: var(--header-footer-color);
+    font-size: 20px;
+    >div{
+        display: grid;
+        grid-template-columns: auto auto;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+footer{
+    font-size: 15px;
+    svg{
+        height: 35px;
+    }
+    >div{
+        column-gap: 10px;
+    }
+}
+#content-container{
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    #ttt-container{
+        display: grid;
+        grid-template-columns: repeat(3, var(--cell-size));
+        grid-template-rows: repeat(3, var(--cell-size));
+        background-color: var(--principal-color);
+        border-radius: var(--radius);
+        gap: 15px;
+        .ttt-cell{
+            background-color: var(--background-color);
+        }
+    }
+}
