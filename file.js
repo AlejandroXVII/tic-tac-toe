@@ -1,3 +1,7 @@
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
 const gameBoard = (function () {
     let defaultSymbol = '-';
     board = [[defaultSymbol,defaultSymbol,defaultSymbol],
@@ -8,6 +12,7 @@ const gameBoard = (function () {
     const addMark = (fila,colum,symbol) => { //if there are a symbol already return false
         if (board[fila][colum] === defaultSymbol) {
             board[fila][colum]=symbol;  
+            showBoard();
             checkWinner();
             return true; 
         }
@@ -48,14 +53,16 @@ const gameBoard = (function () {
     const announceWinner = (symbol) => {
         if(symbol!==defaultSymbol){
             showBoard();
-            console.log('Has been a '+symbol+' the winner');
+            alert('Has been a '+symbol+' the winner');
             resetBoard();
+            displayOnScreen.cleanCells();
         }
     }
     const announceTie = (symbol) => {
         showBoard();
-        console.log('Has been a tie');
+        alert('Has been a tie');
         resetBoard();
+        displayOnScreen.cleanCells();
     }
     const showBoard = () => {
         console.table(board);
@@ -67,7 +74,7 @@ const gameBoard = (function () {
     }
     const verifiedIfThereAreXorO = (fila,colum) => (board[fila][colum] === defaultSymbol) ? false : true;
 
-    return {addMark,showBoard,checkWinner,verifiedIfThereAreXorO};
+    return {boardSize,addMark,showBoard,checkWinner,verifiedIfThereAreXorO};
 })();
 
 function createPlayer (n,s) {
@@ -90,22 +97,41 @@ function createPlayer (n,s) {
     return {win,lose,tie,getName,getSymbol,getVictories,getTies,getDefeats};
 }
 
-/*const play = (function (player1,player2) {
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-      }
-    do {
-        gameBoard.showBoard();
-        let array = prompt ('Ingress X corn: ').split(" ");
-        array[0]=Number(array[0]);
-        array[1]=Number(array[1]);
-        gameBoard.addMark(array[0],array[1],'X');
-        let x = y = 0;
-        do {
-            x = getRandomInt(3);
-            y = getRandomInt(3);   
-        } while (gameBoard.verifiedIfThereAreXorO(x,y));
-        gameBoard.addMark(x,y,'O');
+const displayOnScreen = (function () {
+    let cells = document.querySelectorAll(".ttt-cell button");
+    
+    $board = [[cells[0],cells[1],cells[2]],
+    [cells[3],cells[4],cells[5]],
+    [cells[6],cells[7],cells[8]]];
+    const getCell = (x,y) => $board[x][y];
+    const setCell = (symbol,enemySymbol) => {
+        for (let x = 0; x < gameBoard.boardSize; x++) {
+            for (let y = 0; y < gameBoard.boardSize; y++) {
+                $board[x][y].addEventListener('click',() => {
+                    if (!gameBoard.verifiedIfThereAreXorO(x,y)){
+                        $board[x][y].textContent = symbol;
+                        gameBoard.addMark(x,y,symbol);
+                        let i = j = 0;
+                        do {
+                            i = getRandomInt(3);
+                            j = getRandomInt(3);            
+                        } while (gameBoard.verifiedIfThereAreXorO(i,j));
+                        $board[i][j].textContent = enemySymbol;
+                        gameBoard.addMark(i,j,enemySymbol);
+                    }
+                });
+            }
+        }
+    }
+    const cleanCells = () => {
+        for (let x = 0; x < gameBoard.boardSize; x++){
+            for (let y = 0; y < gameBoard.boardSize; y++){
+                $board[x][y].textContent = '';
+            }
+        }
+    }
 
-    } while (true);
-})('Ale','Pancho');*/
+    return {getCell,setCell,cleanCells};
+})();
+
+displayOnScreen.setCell('X','O');

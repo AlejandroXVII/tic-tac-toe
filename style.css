@@ -1,14 +1,14 @@
 :root{
-    --principal-color: #F3B562;
-    --background-color: #F2EBBF;
-    --header-footer-color: #F2EBBF  ;
+    --principal-color: #2980B9;
+    --background-color: #2C3E50;
+    --header-footer-color: #2C3E50;
     --profile-background-color: #c4b5fd;
     --icon-size: 25px;
-    --shadow: 0px 15px 30px -35px black;
+    --shadow: 0px 0px 20px -15px black;
     --radius: 15px;
     --box-size-width: 240px;
     --tex-description-color: rgb(87, 87, 87);
-    --tex-icon-color: #5C4B51;
+    --tex-icon-color: #ECF0F1;
     --text-description-size: 14px;
     --cell-size: 150px;
 }
@@ -64,9 +64,19 @@ footer{
         grid-template-rows: repeat(3, var(--cell-size));
         background-color: var(--principal-color);
         border-radius: var(--radius);
-        gap: 15px;
+        box-shadow: var(--shadow);
+        gap: 18px;
         .ttt-cell{
             background-color: var(--background-color);
+            button{
+                height: var(--cell-size);
+                width: var(--cell-size);
+                background-color: var(--background-color);
+                border: 0;
+                font-size: 70px;
+                color: #E74C3C;
+                font-weight: bold;
+            }
         }
     }
 }
