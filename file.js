@@ -3,6 +3,7 @@ function getRandomInt(max) {
 }
 
 const gameBoard = (function () {
+    let player1=createPlayer('Ale','X')
     let defaultSymbol = '-';
     board = [[defaultSymbol,defaultSymbol,defaultSymbol],
     [defaultSymbol,defaultSymbol,defaultSymbol],
@@ -52,13 +53,18 @@ const gameBoard = (function () {
     }
     const announceWinner = (symbol) => {
         if(symbol!==defaultSymbol){
+            if(player1.getSymbol()===symbol)
+                displayOnScreen.addWin();
+            else 
+                displayOnScreen.addLose();
             showBoard();
-            alert('Has been a '+symbol+' the winner');
+            alert('Player '+symbol+' has been the winner');
             resetBoard();
             displayOnScreen.cleanCells();
         }
     }
     const announceTie = (symbol) => {
+        displayOnScreen.addTie();
         showBoard();
         alert('Has been a tie');
         resetBoard();
@@ -74,7 +80,7 @@ const gameBoard = (function () {
     }
     const verifiedIfThereAreXorO = (fila,colum) => (board[fila][colum] === defaultSymbol) ? false : true;
 
-    return {boardSize,addMark,showBoard,checkWinner,verifiedIfThereAreXorO};
+    return {boardSize,addMark,showBoard,checkWinner,verifiedIfThereAreXorO,resetBoard};
 })();
 
 function createPlayer (n,s) {
@@ -99,10 +105,21 @@ function createPlayer (n,s) {
 
 const displayOnScreen = (function () {
     let cells = document.querySelectorAll(".ttt-cell button");
-    
     $board = [[cells[0],cells[1],cells[2]],
     [cells[3],cells[4],cells[5]],
     [cells[6],cells[7],cells[8]]];
+
+    const $name = document.querySelector('#name');
+    const $victories = document.querySelector('#victories');
+    const $defeats = document.querySelector('#defeats');
+    const $ties = document.querySelector('#ties');
+    const $star = document.querySelector('#star');
+    const $reStar = document.querySelector('#re-star');
+
+    const addWin = () => $victories.textContent=Number($victories.textContent)+1;
+    const addLose = () => $defeats.textContent=Number($defeats.textContent)+1;
+    const addTie = () => $ties.textContent=Number($ties.textContent)+1;
+
     const getCell = (x,y) => $board[x][y];
     const setCell = (symbol,enemySymbol) => {
         for (let x = 0; x < gameBoard.boardSize; x++) {
@@ -130,8 +147,26 @@ const displayOnScreen = (function () {
             }
         }
     }
+   
+    //$star.addEventListener('click',setCell('X','O'));
+    $star.addEventListener('click', function(event) { 
+        event.stopPropagation;
+        alert('READY TO STAR THIS ROUND');
+        setCell('X','O');
+    });
 
-    return {getCell,setCell,cleanCells};
+    $reStar.addEventListener('click', function(event) { 
+        event.stopPropagation;
+        cleanCells();
+        $ties.textContent=0;
+        $defeats.textContent=0;
+        $victories.textContent=0;
+        gameBoard.resetBoard();
+        alert('THE GAME HAS BEEN RESET');
+    });
+
+    return {getCell,setCell,cleanCells,$victories,addWin,addLose,addTie,$reStar};
 })();
 
-displayOnScreen.setCell('X','O');
+let player1 = createPlayer('ale','X')
+//displayOnScreen.setCell('X','O');
